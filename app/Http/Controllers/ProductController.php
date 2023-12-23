@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
+use Illuminate\Http\Request;
+use App\Http\Resources\ProductResource;
 use App\Http\Requests\CreateProductRequest;
 use App\Http\Requests\UpdateProductRequest;
-use App\Http\Resources\ProductResource;
-use App\Models\Product;
+use App\Http\Requests\createWithPriceModifiersRequest;
 use App\Repository\Contract\ProductRepositoryInterface;
-use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
@@ -33,6 +34,7 @@ class ProductController extends Controller
      */
     public function index()
     {
+        
         return $this->responseSuccess(ProductResource::collection($this->productRepo->getAll()) , 'Get All Products Successfully' , 200);
 
     }
@@ -98,4 +100,27 @@ class ProductController extends Controller
        return $this->responseWithoutData('Product deleted Successfully', 202);
 
     }
+
+    /**
+     * createWithPriceModifiers
+     * @param createWithPriceModifiersRequest $request
+     *
+     * @return [type]
+     */
+    public function createWithPriceModifiers(createWithPriceModifiersRequest $request){
+       return $this->productRepo->createWithPriceModifiers($request->validated() ,  $request->input('price_modifiers', []));
+    }
+
+    /**
+     * showSpecificProductPriceForLoggedInUser
+     * @param Product $product
+     *
+     * @return [type]
+     */
+    public function showSpecificProductPriceForLoggedInUser(Product $product){
+        $user = auth()->user();
+        return $this->productRepo->showSpecificProductPriceForLoggedInUser($product->id , $user);
+    }
+
+
 }

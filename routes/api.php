@@ -23,5 +23,10 @@ Route::post('login' , [AuthController::class , 'login']);
 Route::middleware('auth:sanctum')->group(function(){
     //User CRUD
     Route::resource('/user' , UserController::class);
-    Route::resource('product' , ProductController::class);
+    //Product Crud
+    Route::resource('/product' , ProductController::class);
+    //Create Product With Different Prices Based On User Type
+    Route::post('/create/different/prices' , [ProductController::class , 'createWithPriceModifiers']);
+    //Show Prices for logged In User
+    Route::get('show/prices/{product}' , [ProductController::class , 'showSpecificProductPriceForLoggedInUser']);
 });
