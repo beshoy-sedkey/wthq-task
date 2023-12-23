@@ -1,64 +1,195 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# User & Product Management
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This repository contains the code for a microservice built with Laravel that manages users and products. It supports user registration and login, creating, retrieving, updating, and deleting users and products. Additionally, it shows different product prices to users based on their type (normal, gold, and silver).
 
-## About Laravel
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Features
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- User Registration and Login
+- User CRUD operations
+- Product CRUD operations
+- Dynamic product pricing based on user type
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Requirements
+- PHP >= 8.1
+- Composer
+- MySQL or any other database supported by Laravel
+- Laravel >= 8.x
 
-## Learning Laravel
+## Installation
+Clone the repository and install dependencies:
+```bash
+git clone https://github.com/beshoy-sedkey/wthq-task
+cp .env.example .env
+```
+```
+- Database Configuration
+```
+DB_CONNECTION=mysql
+DB_HOST=wathq-db
+DB_PORT=3306
+DB_DATABASE=wathq
+DB_USERNAME=root
+DB_PASSWORD=123456789
+```
+## RUN Docker
+```bash
+docker-compose build --up -d 
+```
+## Migrate Tables In Database
+```bash
+RUN docker ps (select the CONTAINER ID for auth service)
+RUN docker exec -ti --user root (container_id) /bin/bash
+RUN php artisan migrate
+```
+ 
+## API Reference
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+#### Register
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```http
+  Post /api/register
+```
 
-## Laravel Sponsors
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `name` | `string` | **Required**| 
+| `email` | `string` | **Required**|
+| `password` | `string` | **Required**|
+| `type` | `string` | **Required** **[silver , normal , gold]**|
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+#### Login
 
-### Premium Partners
+```http
+  Post /api/Login
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `email` | `string` | **Required**| 
+| `password` | `string` | **Required**|
 
-## Contributing
+#### Create User
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```http
+  Post /api/user
+```
 
-## Code of Conduct
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `name` | `string` | **Required**| 
+| `email` | `string` | **Required**|
+| `password` | `string` | **Required**|
+| `type` | `string` | **Required** **[silver , normal , gold]**|
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+#### Update User
 
-## Security Vulnerabilities
+```http
+  Post /api/user/{id}
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `name` | `string` | **Sometimes**| 
+| `email` | `string` | **Sometimes**|
 
-## License
+#### Show User
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```http
+  GET /api/user/{id}
+```
+#### Delete User
+
+```http
+  DELETE /api/user/{id}
+```
+#### List User
+
+```http
+  GET /api/user
+```
+
+
+
+
+#### Create Product
+
+```http
+  Post /api/product
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `name` | `string` | **Required**| 
+| `price` | `string` | **Required**|
+| `is_active` | `string` | **Required**  **1 or 2**|
+
+#### Update Product
+
+```http
+  Post /api/product/{id}
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `name` | `string` | **Sometimes**| 
+| `price` | `string` | **Sometimes**|
+
+#### Update Product
+
+```http
+  Post /api/product/{id}
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `name` | `string` | **Sometimes**| 
+| `price` | `string` | **Sometimes**|
+
+#### Create a price modifiers for product 
+```http
+  Post /create/different/prices
+```
+## Request  Sample
+```json
+{
+  "price_modifiers": [
+    {
+      "user_type": "gold",
+      "value": 5,
+      "is_percentage": false
+    },
+    {
+      "user_type": "silver",
+      "value": 10,
+      "is_percentage": false
+    },
+    {
+      "user_type": "normal",
+      "value": 10,
+      "is_percentage": false
+    }
+  ]
+}
+```
+### Show Product For Logged In User
+```http
+  GET /show/prices/{product_id}
+```
+
+#### Show Product
+
+```http
+  GET /api/product/{id}
+```
+#### Delete Product
+
+```http
+  DELETE /api/product/{id}
+```
+#### List Product
+
+```http
+  GET /api/product
+```
+

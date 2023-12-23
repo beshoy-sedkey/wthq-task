@@ -59,7 +59,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     }
 
     /**
-     * 
+     *
      * @param int $product_id
      * @param object $user
      *
